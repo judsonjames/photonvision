@@ -287,6 +287,12 @@ jobs:
             image_url: https://github.com/PhotonVision/photon-image-modifier/releases/download/v2024.0.4/photonvision_opi5.img.xz
             cpu: cortex-a8
             image_additional_mb: 4096
+          - os: ubuntu-latest
+            artifact-name: LinuxArm64
+            image_suffix: limelight3
+            image_url: https://github.com/PhotonVision/photon-image-modifier/releases/download/v2024.0.4/photonvision_raspi.img.xz
+            cpu: cortex-a8
+            image_additional_mb: 0
 
     runs-on: ${{ matrix.os }}
     name: "Build image - ${{ matrix.image_url }}"
@@ -311,7 +317,7 @@ jobs:
           bind_mount_repository: true
           commands: |
             chmod +x scripts/armrunner.sh
-            ./scripts/armrunner.sh
+            ./scripts/armrunner.sh ${{ matrix.image_suffix }}
       - name: Compress image
         run: |
           new_jar=$(realpath $(find . -name photonvision\*-linuxarm64.jar))
