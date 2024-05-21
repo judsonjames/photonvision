@@ -33,6 +33,7 @@ import org.photonvision.mrcal.MrCalJNILoader;
 import org.photonvision.raspi.LibCameraJNILoader;
 import org.photonvision.vision.calibration.UICameraCalibrationCoefficients;
 import org.photonvision.vision.camera.QuirkyCamera;
+import org.photonvision.vision.opencl.OpenCLUtils;
 import org.photonvision.vision.processes.VisionModule;
 import org.photonvision.vision.processes.VisionModuleManager;
 import org.photonvision.vision.processes.VisionSource;
@@ -137,7 +138,9 @@ public class PhotonConfiguration {
                 "gpuAcceleration",
                 LibCameraJNILoader.isSupported()
                         ? "Zerocopy Libcamera Working"
-                        : ""); // TODO add support for other types of GPU accel
+                        : OpenCLUtils.hasOpenCL()
+                                ? "OpenCL Detected"
+                                : ""); // TODO add support for other types of GPU accel
         generalSubmap.put("mrCalWorking", MrCalJNILoader.getInstance().isLoaded());
         generalSubmap.put("rknnSupported", RknnDetectorJNI.getInstance().isLoaded());
         generalSubmap.put("hardwareModel", hardwareConfig.deviceName);
@@ -145,6 +148,9 @@ public class PhotonConfiguration {
         settingsSubmap.put("general", generalSubmap);
         // AprilTagFieldLayout
         settingsSubmap.put("atfl", this.atfl);
+
+        // Check if OpenCL is supported
+        settingsSubmap.put("openclSupported", OpenCLUtils.hasOpenCL());
 
         map.put(
                 "cameraSettings",

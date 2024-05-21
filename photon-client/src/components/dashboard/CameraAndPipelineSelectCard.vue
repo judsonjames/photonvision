@@ -25,6 +25,9 @@ const changeCurrentCameraIndex = (index: number) => {
     case PipelineType.Aruco:
       pipelineType.value = WebsocketPipelineType.Aruco;
       break;
+    case PipelineType.ArucoOpenCL:
+      pipelineType.value = WebsocketPipelineType.ArucoOpenCL;
+      break;
     case PipelineType.ObjectDetection:
       pipelineType.value = WebsocketPipelineType.ObjectDetection;
       break;
@@ -170,6 +173,11 @@ const pipelineTypesWrapper = computed<{ name: string; value: number }[]>(() => {
     { name: "AprilTag", value: WebsocketPipelineType.AprilTag },
     { name: "Aruco", value: WebsocketPipelineType.Aruco }
   ];
+
+  if (useSettingsStore().general.openclSupported) {
+    pipelineTypes.push({ name: "Aruco OCL", value: WebsocketPipelineType.ObjectDetection });
+  }
+
   if (useSettingsStore().general.rknnSupported) {
     pipelineTypes.push({ name: "Object Detection", value: WebsocketPipelineType.ObjectDetection });
   }

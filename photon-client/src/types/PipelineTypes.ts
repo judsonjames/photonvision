@@ -6,7 +6,8 @@ export enum PipelineType {
   ColoredShape = 3,
   AprilTag = 4,
   Aruco = 5,
-  ObjectDetection = 6
+  ObjectDetection = 6,
+  ArucoOpenCL = 7,
 }
 
 export enum AprilTagFamily {
@@ -257,6 +258,27 @@ export interface ArucoPipelineSettings extends PipelineSettings {
   doMultiTarget: boolean;
   doSingleTargetAlways: boolean;
 }
+
+export interface ArucoOpenCLPipelineSettings extends PipelineSettings {
+  pipelineType: PipelineType.ArucoOpenCL;
+
+  tagFamily: AprilTagFamily;
+
+  threshWinSizes: WebsocketNumberPair | [number, number];
+  threshStepSize: number;
+  threshConstant: number;
+  debugThreshold: boolean;
+
+  useCornerRefinement: boolean;
+
+  useAruco3: boolean;
+  aruco3MinMarkerSideRatio: number;
+  aruco3MinCanonicalImgSide: number;
+
+  doMultiTarget: boolean;
+  doSingleTargetAlways: boolean;
+}
+
 export type ConfigurableArucoPipelineSettings = Partial<Omit<ArucoPipelineSettings, "pipelineType">> &
   ConfigurablePipelineSettings;
 export const DefaultArucoPipelineSettings: ArucoPipelineSettings = {
@@ -288,6 +310,7 @@ export interface ObjectDetectionPipelineSettings extends PipelineSettings {
   nms: number;
   box_thresh: number;
 }
+
 export type ConfigurableObjectDetectionPipelineSettings = Partial<
   Omit<ObjectDetectionPipelineSettings, "pipelineType">
 > &
@@ -310,7 +333,8 @@ export type ActivePipelineSettings =
   | ColoredShapePipelineSettings
   | AprilTagPipelineSettings
   | ArucoPipelineSettings
-  | ObjectDetectionPipelineSettings;
+  | ObjectDetectionPipelineSettings
+  | ArucoOpenCLPipelineSettings;
 
 export type ActiveConfigurablePipelineSettings =
   | ConfigurableReflectivePipelineSettings
